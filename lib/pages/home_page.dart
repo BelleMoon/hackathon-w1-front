@@ -1,9 +1,45 @@
 import 'package:flutter/material.dart';
 import '../widgets/footer.dart';
 import '../widgets/topbar.dart';
+import 'dart:convert'; // necessário para base64
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:typed_data';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  Uint8List? _imageBytes;
+  String? _nome;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadProfileData();
+  }
+
+  Future<void> _loadProfileData() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    final nomeSalvo = prefs.getString('perfil_nome');
+    final imageBase64 = prefs.getString('perfil_image_base64');
+
+    setState(() {
+      _nome = nomeSalvo;
+      if (imageBase64 != null) {
+        _imageBytes = base64Decode(imageBase64);
+      }
+    });
+  }
+
+  String _capitalizeFirst(String text) {
+    if (text.isEmpty) return text;
+    return text[0].toUpperCase() + text.substring(1).toLowerCase();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,20 +77,24 @@ class HomePage extends StatelessWidget {
                         shape: BoxShape.circle,
                         border: Border.all(color: Colors.black, width: 2),
                       ),
-                      child: const CircleAvatar(
+                      child: CircleAvatar(
                         radius: 60,
-                        backgroundImage:
-                            AssetImage('assets/imagens/avatar-placeholder.png'),
+                        backgroundImage: _imageBytes != null
+                            ? MemoryImage(_imageBytes!)
+                            : const AssetImage(
+                                    'assets/imagens/avatar-placeholder.png')
+                                as ImageProvider,
                       ),
                     ),
                     const SizedBox(height: 16),
-                    const Text(
-                      'Olá, %Nome%',
-                      style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w400,
-                          fontFamily: 'Montserrat'),
+                    Text(
+                      'Olá, ${_nome != null ? _capitalizeFirst(_nome!.split(' ').first) : '%Nome%'}',
+                      style: const TextStyle(
+                        fontSize: 18,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: 'Montserrat',
+                      ),
                     ),
                     const SizedBox(height: 12),
                     ElevatedButton(
@@ -64,8 +104,10 @@ class HomePage extends StatelessWidget {
                           borderRadius: BorderRadius.circular(6),
                         ),
                       ),
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/perfil');
+                      onPressed: () async {
+                        Navigator.pushNamed(context, '/perfil').then((_) {
+                          _loadProfileData(); // só chama quando voltar da tela de perfil
+                        });
                       },
                       child: const Text('✏️ Editar Perfil'),
                     ),

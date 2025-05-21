@@ -3,6 +3,10 @@ import 'pages/home_page.dart';
 import 'pages/patrimonio_page.dart';
 import 'pages/perfil_page.dart';
 import 'pages/suporte_page.dart';
+import 'pages/status_page.dart';
+import 'pages/login_register_page.dart';
+
+import '../widgets/footer.dart';
 
 void main() {
   runApp(const W1App());
@@ -22,12 +26,15 @@ class W1App extends StatelessWidget {
           bodyMedium: TextStyle(color: Colors.black87),
         ),
       ),
-      initialRoute: '/',
+      initialRoute: '/landing',
       routes: {
+        '/landing': (_) => const LandingPage(),
         '/': (_) => const HomePage(),
         '/patrimonio': (_) => const PatrimonioPage(),
         '/perfil': (_) => const PerfilPage(),
+        '/status': (context) => const StatusPage(),
         '/suporte': (_) => const SuportePage(),
+        '/login': (_) => const LoginRegisterPage(),
       },
       debugShowCheckedModeBanner: false,
     );
@@ -40,79 +47,25 @@ class LandingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFF0e1a1f),
       body: Column(
         children: const [
-          TopBar(),
-          Expanded(child: HeroSection()),
-          Footer(),
+          TopBarLanding(),
+          Expanded(child: _LandingHeroSection()),
         ],
       ),
+      bottomNavigationBar: const Footer(),
     );
   }
 }
 
-class TopBar extends StatelessWidget {
-  const TopBar({super.key});
+class _LandingHeroSection extends StatelessWidget {
+  const _LandingHeroSection({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-      color: const Color(0xFF0e1a1f),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          const Text(
-            'w1',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          ),
-          Row(
-            children: [
-              NavItem(title: 'Sobre'), // sem rota, só texto
-              NavItem(title: 'Suporte', route: '/suporte'),
-              NavItem(title: 'Entrar', outlined: true, route: '/perfil'),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class NavItem extends StatelessWidget {
-  final String title;
-  final String? route;
-  final bool outlined;
-
-  const NavItem(
-      {super.key, required this.title, this.route, this.outlined = false});
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: route != null ? () => Navigator.pushNamed(context, route!) : null,
-      child: Container(
-        margin: const EdgeInsets.only(left: 16),
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-        decoration: outlined
-            ? BoxDecoration(
-                border: Border.all(color: Colors.white),
-                borderRadius: BorderRadius.circular(5),
-              )
-            : null,
-        child: Text(title),
-      ),
-    );
-  }
-}
-
-class HeroSection extends StatelessWidget {
-  const HeroSection({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: double.infinity,
+      width: double.infinity,
       decoration: const BoxDecoration(
         image: DecorationImage(
           image: AssetImage('assets/imagens/bg-landing_upscayl_2x.png'),
@@ -121,31 +74,38 @@ class HeroSection extends StatelessWidget {
         ),
       ),
       child: Container(
-        color: const Color.fromRGBO(0, 80, 70, 0.8),
         alignment: Alignment.center,
-        padding: const EdgeInsets.all(32),
+        color: const Color.fromRGBO(0, 80, 70, 0.8), // overlay
+        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 48),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Text(
               'Blindagem patrimonial e crescimento estratégico para holdings.',
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 24),
+              style: TextStyle(
+                fontSize: 28,
+                color: Colors.white,
+                fontWeight: FontWeight.w500,
+              ),
             ),
-            const SizedBox(height: 24),
-            GestureDetector(
-              onTap: () => Navigator.pushNamed(context, '/patrimonio'),
-              child: Container(
+            const SizedBox(height: 32),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
                 padding:
-                    const EdgeInsets.symmetric(vertical: 12, horizontal: 32),
-                decoration: BoxDecoration(
-                  color: const Color(0xFF0e1a1f),
-                  borderRadius: BorderRadius.circular(5),
+                    const EdgeInsets.symmetric(vertical: 14, horizontal: 36),
+                backgroundColor: Colors.white,
+                foregroundColor: const Color(0xFF0e1a1f),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(6),
                 ),
-                child: const Text(
-                  'Começar',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
+              ),
+              onPressed: () {
+                Navigator.pushNamed(context, '/login');
+              },
+              child: const Text(
+                'Começar',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
             ),
           ],
@@ -155,31 +115,45 @@ class HeroSection extends StatelessWidget {
   }
 }
 
-class Footer extends StatelessWidget {
-  const Footer({super.key});
+class TopBarLanding extends StatelessWidget implements PreferredSizeWidget {
+  const TopBarLanding({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: const Color(0xFF0e1a1f),
-      padding: const EdgeInsets.all(24),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text('Conheça a W1',
-              style: TextStyle(fontWeight: FontWeight.bold)),
-          const SizedBox(height: 8),
-          const Text('• W1 Consciência'),
-          const Text('• W1 Capital'),
-          const Text('• W1 Tecnologia'),
-          const Text('• W1 Consultoria Patrimonial'),
-          const SizedBox(height: 24),
-          const Text('Contato:', style: TextStyle(fontWeight: FontWeight.bold)),
-          const Text(
-              'Endereço: R. Funchal 418 - Conjunto 1701 - Vila Olímpia, São Paulo - SP, 04551-060'),
-          const Text('Telefone: (11) 3001-3007'),
-        ],
+    return AppBar(
+      automaticallyImplyLeading: false, // remove botão de voltar
+      backgroundColor: const Color(0xff0e1a1f),
+      title: Image.asset(
+        'assets/imagens/logo-w1.png',
+        height: 32,
       ),
+      actions: [
+        TextButton(
+          onPressed: () {},
+          child: const Text('Sobre', style: TextStyle(color: Colors.white)),
+        ),
+        TextButton(
+          onPressed: () {
+            Navigator.pushNamed(context, '/suporte');
+          },
+          child: const Text('Suporte', style: TextStyle(color: Colors.white)),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: OutlinedButton(
+            style: OutlinedButton.styleFrom(
+              side: const BorderSide(color: Colors.white),
+            ),
+            onPressed: () {
+              Navigator.pushNamed(context, '/');
+            },
+            child: const Text('Entrar', style: TextStyle(color: Colors.white)),
+          ),
+        ),
+      ],
     );
   }
+
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }

@@ -30,11 +30,18 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  syncfusion_flutter_charts: ^20.2.45
+  #syncfusion_flutter_charts: ^20.2.45
+  syncfusion_flutter_charts: ^20.2.45 
   http: ^1.4.0
+  #intl: ^0.18.1
   intl: ^0.18.1
-  file_picker: ^6.1.1
-
+  #file_picker: ^6.1.1
+  file_picker: ^8.3.2
+  shared_preferences: ^2.2.2
+  firebase_core: ^3.13.1
+  firebase_auth: ^5.5.4
+  google_sign_in: ^6.2.1
+  sign_in_with_apple: ^7.0.1
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -72,6 +79,7 @@ flutter:
     - assets/imagens/icon-bens.png
     - assets/imagens/icon-caixa.png
     - assets/imagens/icon-investimento.png
+    - assets/imagens/google_icon.png
 
   fonts:
     - family: Montserrat

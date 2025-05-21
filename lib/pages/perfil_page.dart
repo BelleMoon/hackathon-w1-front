@@ -3,6 +3,9 @@ import '../widgets/topbar.dart';
 import '../widgets/footer.dart';
 import 'package:file_picker/file_picker.dart';
 import 'dart:io';
+import 'dart:typed_data';
+import 'dart:convert'; // necessário para base64
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PerfilPage extends StatefulWidget {
   const PerfilPage({super.key});
@@ -12,7 +15,7 @@ class PerfilPage extends StatefulWidget {
 }
 
 class _PerfilPageState extends State<PerfilPage> {
-  File? _selectedImage;
+  Uint8List? _imageBytes;
 
   final _nomeController = TextEditingController();
   final _emailController = TextEditingController();
@@ -20,12 +23,55 @@ class _PerfilPageState extends State<PerfilPage> {
   final _senhaController = TextEditingController();
   final _confirmarSenhaController = TextEditingController();
 
+  @override
+  void initState() {
+    super.initState();
+    _loadImage();
+    _loadProfileData(); // ← isso é necessário para carregar nome etc
+  }
+
+  Future<void> _loadImage() async {
+    final prefs = await SharedPreferences.getInstance();
+    final base64String = prefs.getString('perfil_image_base64');
+    if (base64String != null) {
+      final bytes = base64Decode(base64String);
+      setState(() {
+        _imageBytes = bytes;
+      });
+    }
+  }
+
+  Future<void> _loadProfileData() async {
+    final prefs = await SharedPreferences.getInstance();
+    final nome = prefs.getString('perfil_nome');
+    final email = prefs.getString('perfil_email');
+    final telefone = prefs.getString('perfil_telefone');
+
+    setState(() {
+      if (nome != null) _nomeController.text = nome;
+      if (email != null) _emailController.text = email;
+      if (telefone != null) _telefoneController.text = telefone;
+    });
+  }
+
   Future<void> _pickImage() async {
     final result = await FilePicker.platform.pickFiles(type: FileType.image);
-    if (result != null && result.files.single.path != null) {
-      setState(() {
-        _selectedImage = File(result.files.single.path!);
-      });
+
+    if (result != null) {
+      Uint8List? bytes = result.files.single.bytes;
+
+      if (bytes == null && result.files.single.path != null) {
+        bytes = await File(result.files.single.path!).readAsBytes();
+      }
+
+      if (bytes != null) {
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('perfil_image_base64', base64Encode(bytes));
+
+        setState(() {
+          _imageBytes = bytes;
+        });
+      }
     }
   }
 
@@ -40,7 +86,7 @@ class _PerfilPageState extends State<PerfilPage> {
         toolbarHeight: kToolbarHeight * 1.5,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(15),
+        padding: const EdgeInsets.all(32),
         child: Center(
           child: Container(
             constraints: const BoxConstraints(maxWidth: 600),
@@ -50,11 +96,12 @@ class _PerfilPageState extends State<PerfilPage> {
               borderRadius: BorderRadius.circular(16),
               boxShadow: const [
                 BoxShadow(
-                    color: Colors.black12, blurRadius: 8, offset: Offset(0, 4))
+                    color: Colors.black12, blurRadius: 8, offset: Offset(0, 4)),
               ],
             ),
             child: Column(
               children: [
+                // Imagem de perfil
                 GestureDetector(
                   onTap: _pickImage,
                   child: Container(
@@ -65,14 +112,15 @@ class _PerfilPageState extends State<PerfilPage> {
                     ),
                     child: CircleAvatar(
                       radius: 60,
-                      backgroundImage: _selectedImage != null
-                          ? FileImage(_selectedImage!)
+                      backgroundImage: _imageBytes != null
+                          ? MemoryImage(_imageBytes!)
                           : const AssetImage(
                                   'assets/imagens/avatar-placeholder.png')
                               as ImageProvider,
                     ),
                   ),
                 ),
+
                 const SizedBox(height: 16),
                 ElevatedButton.icon(
                   onPressed: _pickImage,
@@ -86,6 +134,7 @@ class _PerfilPageState extends State<PerfilPage> {
                   label: const Text('Trocar Imagem'),
                 ),
                 const SizedBox(height: 24),
+
                 const Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
@@ -147,8 +196,18 @@ class _PerfilPageState extends State<PerfilPage> {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () {
-                      // Validação e envio futuro
+                    onPressed: () async {
+                      final prefs = await SharedPreferences.getInstance();
+                      await prefs.setString(
+                          'perfil_nome', _nomeController.text);
+                      await prefs.setString(
+                          'perfil_email', _emailController.text);
+                      await prefs.setString(
+                          'perfil_telefone', _telefoneController.text);
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Alterações salvas!')),
+                      );
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xff0e1a1f),

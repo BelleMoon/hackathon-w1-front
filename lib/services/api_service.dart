@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import '../models/holding_status.dart';
 
 // MODELOS
 class AllocationItem {
@@ -64,5 +65,11 @@ class ApiService {
     return list
         .map((e) => LineDataItem(e['label'], e['value'].toDouble()))
         .toList();
+  }
+
+  static Future<List<HoldingStatus>> fetchHoldingsStatus() async {
+    final resp = await http.get(Uri.parse('$_baseUrl/holdings_status'));
+    final list = jsonDecode(resp.body) as List;
+    return list.map((e) => HoldingStatus.fromJson(e)).toList();
   }
 }

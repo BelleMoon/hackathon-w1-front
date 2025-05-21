@@ -11,80 +11,142 @@ class SuportePage extends StatefulWidget {
 
 class _SuportePageState extends State<SuportePage> {
   final TextEditingController _controller = TextEditingController();
-  final List<Map<String, String>> _messages = [];
+  final List<Map<String, String>> _messages =
+      []; // {'role': 'user'|'assistant', 'text': '...'}
 
   void _sendMessage() {
     final text = _controller.text.trim();
     if (text.isEmpty) return;
+
     setState(() {
-      _messages.add({'user': text});
-      _messages.add({'bot': 'Resposta gerada pelo bot (substituir pela API).'});
+      _messages.add({'role': 'user', 'text': text});
+      _controller.clear();
     });
-    _controller.clear();
+
+    // Simula chamada à API da LLM
+    Future.delayed(const Duration(milliseconds: 500), () {
+      setState(() {
+        _messages.add({
+          'role': 'assistant',
+          'text': 'Recebido! Estamos analisando sua dúvida.'
+        });
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xfff4f6f8),
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        backgroundColor: const Color(0xff0e1a1f),
+        title: const TopBar(),
+        toolbarHeight: kToolbarHeight * 1.5,
+      ),
       body: Column(
         children: [
-          const TopBar(),
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.arrow_back_ios_new),
+                  onPressed: () => Navigator.pop(context),
+                ),
+                const SizedBox(width: 8),
+                const Text(
+                  'Suporte',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Montserrat',
+                  ),
+                ),
+              ],
+            ),
+          ),
           Expanded(
-            child: Container(
-              color: const Color(0xFFF5F5F5),
-              padding: const EdgeInsets.all(24),
-              child: Column(
-                children: [
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: IconButton(
-                      icon: const Icon(Icons.arrow_back),
-                      onPressed: () => Navigator.pop(context),
-                    ),
-                  ),
-                  Expanded(
-                    child: ListView(
-                      children: _messages.map((msg) {
-                        final isUser = msg.containsKey('user');
-                        return Container(
-                          alignment: isUser
-                              ? Alignment.centerRight
-                              : Alignment.centerLeft,
-                          margin: const EdgeInsets.symmetric(vertical: 4),
-                          child: Container(
-                            padding: const EdgeInsets.all(12),
-                            decoration: BoxDecoration(
-                              color: isUser ? Colors.green[100] : Colors.white,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Text(msg.values.first!),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 32),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(24),
+                ),
+                padding: const EdgeInsets.all(24),
+                child: ListView.builder(
+                  itemCount: _messages.length,
+                  itemBuilder: (context, index) {
+                    final msg = _messages[index];
+                    final isUser = msg['role'] == 'user';
+                    return Align(
+                      alignment:
+                          isUser ? Alignment.centerRight : Alignment.centerLeft,
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(vertical: 6),
+                        padding: const EdgeInsets.all(12),
+                        constraints: const BoxConstraints(maxWidth: 500),
+                        decoration: BoxDecoration(
+                          color:
+                              isUser ? const Color(0xff0e1a1f) : Colors.white,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Text(
+                          msg['text']!,
+                          style: TextStyle(
+                            color: isUser ? Colors.white : Colors.black87,
                           ),
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: TextField(
-                          controller: _controller,
-                          decoration: const InputDecoration(
-                              hintText: 'Digite sua mensagem...'),
                         ),
                       ),
-                      IconButton(
-                        onPressed: _sendMessage,
-                        icon: const Icon(Icons.send),
-                      ),
-                    ],
-                  ),
-                ],
+                    );
+                  },
+                ),
               ),
             ),
           ),
-          const Footer(),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    child: TextField(
+                      controller: _controller,
+                      decoration: const InputDecoration(
+                        border: InputBorder.none,
+                        hintText: 'Digite sua dúvida...',
+                      ),
+                      onSubmitted: (_) => _sendMessage(),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                IconButton(
+                  onPressed: _sendMessage,
+                  icon: const Icon(Icons.send, color: Colors.black),
+                ),
+                const SizedBox(width: 4),
+                InkWell(
+                  onTap: () {
+                    // Redirecionar para chat externo se necessário
+                  },
+                  child: Image.asset(
+                    'assets/imagens/whatsapp-icon.png',
+                    width: 36,
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
+      bottomNavigationBar: const Footer(),
     );
   }
 }
