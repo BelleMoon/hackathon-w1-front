@@ -7,17 +7,29 @@ class TopBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: const Color(0xff0e1a1f),
-      title: Image.asset(
-        'assets/imagens/logo-w1.png',
-        height: 32,
+      // Botão de voltar padrão incluído automaticamente se necessário
+      title: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        child: GestureDetector(
+          onTap: () {
+            final currentRoute = ModalRoute.of(context)?.settings.name;
+            if (currentRoute != '/') {
+              Navigator.pushNamed(context, '/');
+            }
+          },
+          child: Image.asset(
+            'assets/imagens/logo-w1.png',
+            height: 32,
+          ),
+        ),
       ),
       actions: [
         TextButton(
-          onPressed: () {},
+          onPressed: () => Navigator.pushNamed(context, '/sobre'),
           child: const Text('Sobre', style: TextStyle(color: Colors.white)),
         ),
         TextButton(
-          onPressed: () {},
+          onPressed: () => Navigator.pushNamed(context, '/suporte'),
           child: const Text('Suporte', style: TextStyle(color: Colors.white)),
         ),
         Padding(
@@ -26,9 +38,7 @@ class TopBar extends StatelessWidget implements PreferredSizeWidget {
             style: OutlinedButton.styleFrom(
               side: const BorderSide(color: Colors.white),
             ),
-            onPressed: () {
-              Navigator.pushNamed(context, '/perfil');
-            },
+            onPressed: () => Navigator.pushNamed(context, '/perfil'),
             child: const Text('Perfil', style: TextStyle(color: Colors.white)),
           ),
         ),

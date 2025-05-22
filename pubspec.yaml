@@ -42,6 +42,9 @@ dependencies:
   firebase_auth: ^5.5.4
   google_sign_in: ^6.2.1
   sign_in_with_apple: ^7.0.1
+  url_launcher: ^6.2.5
+  flutter_animate: ^4.2.0
+  mask_text_input_formatter: ^2.9.0
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -80,6 +83,7 @@ flutter:
     - assets/imagens/icon-caixa.png
     - assets/imagens/icon-investimento.png
     - assets/imagens/google_icon.png
+    - assets/imagens/whatsapp-icon.png
 
   fonts:
     - family: Montserrat

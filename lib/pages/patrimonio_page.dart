@@ -4,6 +4,7 @@ import '../widgets/topbar.dart';
 import '../widgets/footer.dart';
 import '../services/api_service.dart';
 import 'package:intl/intl.dart';
+import '../models/patrimonio_models.dart';
 
 class PatrimonioPage extends StatelessWidget {
   const PatrimonioPage({super.key});

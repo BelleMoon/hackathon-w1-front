@@ -1,38 +1,14 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+
 import '../models/holding_status.dart';
-
-// MODELOS
-class AllocationItem {
-  final String name;
-  final double percent;
-  final Color color;
-  AllocationItem(this.name, this.percent, this.color);
-}
-
-class LineDataItem {
-  final String label;
-  final double value;
-  LineDataItem(this.label, this.value);
-}
-
-class HoldingItem {
-  final String label;
-  final double value;
-  final Color color;
-  final String iconPath;
-  HoldingItem({
-    required this.label,
-    required this.value,
-    required this.color,
-    required this.iconPath,
-  });
-}
+import '../models/patrimonio_models.dart';
 
 // API SERVICE
 class ApiService {
-  static const _baseUrl = 'http://localhost:3000';
+  static const _baseUrl = 'http://localhost:5432';
 
   static Future<List<AllocationItem>> fetchAllocation() async {
     final resp = await http.get(Uri.parse('$_baseUrl/allocation'));
@@ -71,5 +47,54 @@ class ApiService {
     final resp = await http.get(Uri.parse('$_baseUrl/holdings_status'));
     final list = jsonDecode(resp.body) as List;
     return list.map((e) => HoldingStatus.fromJson(e)).toList();
+  }
+
+  static Future<String?> login(String email, String senha) async {
+    final response = await http.post(
+      Uri.parse('$_baseUrl/login'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'email': email, 'senha': senha}),
+    );
+
+    if (response.statusCode == 200) {
+      final body = jsonDecode(response.body);
+      return body['access_token']; // JWT Token
+    } else {
+      return null;
+    }
+  }
+
+  static Future<bool> register({
+    required String nome,
+    required String usuario,
+    required String email,
+    required String senha,
+  }) async {
+    final response = await http.post(
+      Uri.parse('$_baseUrl/register'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'nome': nome,
+        'usuario': usuario,
+        'email': email,
+        'senha': senha,
+      }),
+    );
+
+    return response.statusCode == 201;
+  }
+
+  // GET com token JWT
+  static Future<http.Response> getWithAuth(String path) async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('jwt_token');
+
+    return http.get(
+      Uri.parse('$_baseUrl$path'),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+    );
   }
 }

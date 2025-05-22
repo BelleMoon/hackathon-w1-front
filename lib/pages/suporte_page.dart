@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../widgets/topbar.dart';
 import '../widgets/footer.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SuportePage extends StatefulWidget {
   const SuportePage({super.key});
@@ -119,9 +120,9 @@ class _SuportePageState extends State<SuportePage> {
                     child: TextField(
                       controller: _controller,
                       decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        hintText: 'Digite sua dúvida...',
-                      ),
+                          border: InputBorder.none,
+                          hintText: 'Digite sua dúvida...',
+                          hintStyle: TextStyle(color: Colors.black54)),
                       onSubmitted: (_) => _sendMessage(),
                     ),
                   ),
@@ -133,8 +134,18 @@ class _SuportePageState extends State<SuportePage> {
                 ),
                 const SizedBox(width: 4),
                 InkWell(
-                  onTap: () {
-                    // Redirecionar para chat externo se necessário
+                  onTap: () async {
+                    final url = Uri.parse(
+                        'https://api.whatsapp.com/send?phone=551143017007');
+                    if (await canLaunchUrl(url)) {
+                      await launchUrl(url,
+                          mode: LaunchMode.externalApplication);
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                            content: Text('Não foi possível abrir o WhatsApp')),
+                      );
+                    }
                   },
                   child: Image.asset(
                     'assets/imagens/whatsapp-icon.png',

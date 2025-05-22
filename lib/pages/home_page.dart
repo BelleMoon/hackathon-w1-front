@@ -136,9 +136,8 @@ class _HomePageState extends State<HomePage> {
                     // Botão de Status
                     OutlinedButton(
                       style: OutlinedButton.styleFrom(
-                        backgroundColor:
-                            const Color(0xff0e1a1f), // fundo escuro
-                        foregroundColor: Colors.white, // texto branco
+                        backgroundColor: const Color(0xff0e1a1f),
+                        foregroundColor: Colors.white,
                         side: const BorderSide(
                             color: Color(0xff0e1a1f), width: 2),
                         shape: RoundedRectangleBorder(
@@ -149,10 +148,8 @@ class _HomePageState extends State<HomePage> {
                       onPressed: () => Navigator.pushNamed(context, '/status'),
                       child: const Text(
                         '✅ Status da Holding',
-                        style: TextStyle(
-                          fontSize: 30,
-                          fontFamily: 'Montserrat',
-                        ),
+                        style:
+                            TextStyle(fontSize: 30, fontFamily: 'Montserrat'),
                       ),
                     ),
 
@@ -161,9 +158,8 @@ class _HomePageState extends State<HomePage> {
                     // Botão de Patrimônio
                     OutlinedButton(
                       style: OutlinedButton.styleFrom(
-                        backgroundColor:
-                            const Color(0xff0e1a1f), // fundo escuro
-                        foregroundColor: Colors.white, // texto branco
+                        backgroundColor: const Color(0xff0e1a1f),
+                        foregroundColor: Colors.white,
                         side: const BorderSide(
                             color: Color(0xff0e1a1f), width: 2),
                         shape: RoundedRectangleBorder(
@@ -175,6 +171,29 @@ class _HomePageState extends State<HomePage> {
                           Navigator.pushNamed(context, '/patrimonio'),
                       child: const Text(
                         '🏠 Dashboard de Patrimônio',
+                        style:
+                            TextStyle(fontSize: 30, fontFamily: 'Montserrat'),
+                      ),
+                    ),
+
+                    const SizedBox(height: 16),
+
+                    // Botão de Impostos
+                    OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                        backgroundColor: const Color(0xff0e1a1f),
+                        foregroundColor: Colors.white,
+                        side: const BorderSide(
+                            color: Color(0xff0e1a1f), width: 2),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        minimumSize: const Size(500, 120),
+                      ),
+                      onPressed: () =>
+                          Navigator.pushNamed(context, '/impostos'),
+                      child: const Text(
+                        '📊 Página de Impostos',
                         style:
                             TextStyle(fontSize: 30, fontFamily: 'Montserrat'),
                       ),

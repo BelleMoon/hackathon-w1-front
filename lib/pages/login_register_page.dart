@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import '../widgets/footer.dart';
+import '../services/api_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginRegisterPage extends StatefulWidget {
   const LoginRegisterPage({super.key});
@@ -36,16 +38,53 @@ class _LoginRegisterPageState extends State<LoginRegisterPage> {
     if (_formKey.currentState!.validate()) {
       setState(() => isLoading = true);
 
-      await Future.delayed(const Duration(seconds: 2));
+      try {
+        if (isLogin) {
+          final token = await ApiService.login(
+            _emailController.text,
+            _senhaController.text,
+          );
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(isLogin ? 'Fazendo login...' : 'Conta criada!'),
-        ),
-      );
+          if (token != null) {
+            // Salve o token no SharedPreferences
+            final prefs = await SharedPreferences.getInstance();
+            await prefs.setString('jwt_token', token);
+
+            Navigator.pushReplacementNamed(context, '/patrimonio');
+          } else {
+            _showError('Falha no login. Verifique suas credenciais.');
+          }
+        } else {
+          final success = await ApiService.register(
+            nome: _nomeController.text,
+            usuario: _usuarioController.text,
+            email: _emailController.text,
+            senha: _senhaController.text,
+          );
+
+          if (success) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Conta criada! Faça login.')),
+            );
+            setState(() {
+              isLogin = true;
+            });
+          } else {
+            _showError('Erro ao criar conta.');
+          }
+        }
+      } catch (e) {
+        _showError('Erro inesperado: $e');
+      }
 
       setState(() => isLoading = false);
     }
+  }
+
+  void _showError(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message)),
+    );
   }
 
   InputDecoration _inputDecoration(String label, {IconData? icon}) {
@@ -72,6 +111,7 @@ class _LoginRegisterPageState extends State<LoginRegisterPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Login com Google realizado com sucesso')),
       );
+      Navigator.pushReplacementNamed(context, '/cadastro-patrimonio');
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Erro ao entrar com Google: $e')),
@@ -95,6 +135,7 @@ class _LoginRegisterPageState extends State<LoginRegisterPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Login com Apple realizado com sucesso')),
       );
+      Navigator.pushReplacementNamed(context, '/cadastro-patrimonio');
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Erro ao entrar com Apple: $e')),
