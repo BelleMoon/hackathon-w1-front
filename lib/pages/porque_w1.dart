@@ -1,13 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 import '../widgets/footer.dart';
 import '../widgets/topbar.dart';
+import 'package:intl/intl.dart';
 
-class PorQueFecharPage extends StatelessWidget {
+class PorQueFecharPage extends StatefulWidget {
   const PorQueFecharPage({super.key});
 
   @override
+  State<PorQueFecharPage> createState() => _PorQueFecharPageState();
+}
+
+class _PorQueFecharPageState extends State<PorQueFecharPage> {
+  double _custoAtual = 20000;
+  final double _economiaPercentual = 30;
+
+  @override
   Widget build(BuildContext context) {
+    // cálculos
+    final double economia = _custoAtual * (_economiaPercentual / 100);
+    final double custoComW1 = _custoAtual - economia;
+
+    // dados para o gráfico de colunas
+    final List<_ChartData> chartData = [
+      _ChartData('Atual', _custoAtual, Colors.redAccent),
+      _ChartData('Com W1', custoComW1, Colors.green),
+    ];
+
     return Scaffold(
       appBar: const TopBar(),
       backgroundColor: const Color(0xfff5f6fa),
@@ -98,7 +118,6 @@ class PorQueFecharPage extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(24),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: const [
                   SizedBox(height: 48),
                   Text(
@@ -158,6 +177,67 @@ class PorQueFecharPage extends StatelessWidget {
                   ),
                 ],
               ).animate().fade().slideY(begin: 0.1),
+            ),
+
+            // Simulador de Economia (agora com gráfico de colunas)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
+              child: Column(
+                children: [
+                  const Text(
+                    'Simule sua economia com a W1',
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xff0e1a1f),
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 16),
+
+                  // Gráfico de colunas
+                  SfCartesianChart(
+                    primaryXAxis: CategoryAxis(),
+                    primaryYAxis: NumericAxis(
+                      numberFormat: NumberFormat.currency(symbol: 'R\$'),
+                    ),
+                    series: <ColumnSeries<_ChartData, String>>[
+                      ColumnSeries<_ChartData, String>(
+                        dataSource: chartData,
+                        xValueMapper: (_ChartData data, _) => data.label,
+                        yValueMapper: (_ChartData data, _) => data.value,
+                        pointColorMapper: (_ChartData data, _) => data.color,
+                        dataLabelSettings:
+                            const DataLabelSettings(isVisible: true),
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(6),
+                          topRight: Radius.circular(6),
+                        ),
+                      ),
+                    ],
+                  ).animate().fade().moveY(begin: 20),
+
+                  const SizedBox(height: 16),
+                  Text(
+                    'Você economiza ${_economiaPercentual.toStringAsFixed(0)}%  →  R\$ ${economia.toStringAsFixed(0)}',
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        color: Color(0xff0e1a1f)),
+                  ),
+
+                  const SizedBox(height: 16),
+                  Slider(
+                    value: _custoAtual,
+                    min: 5000,
+                    max: 100000,
+                    divisions: 95,
+                    label: 'R\$ ${_custoAtual.toStringAsFixed(0)}',
+                    onChanged: (value) => setState(() => _custoAtual = value),
+                  ),
+                ],
+              ),
             ),
 
             // Porque W1
@@ -251,10 +331,18 @@ class PorQueFecharPage extends StatelessWidget {
   }
 }
 
+// modelo de dados para o gráfico
+class _ChartData {
+  final String label;
+  final double value;
+  final Color color;
+  _ChartData(this.label, this.value, this.color);
+}
+
+// Tile de serviço
 class _ServiceTile extends StatelessWidget {
   final String label;
   final IconData icon;
-
   const _ServiceTile(this.label, this.icon);
 
   @override
@@ -283,10 +371,10 @@ class _ServiceTile extends StatelessWidget {
   }
 }
 
+// Tile de depoimento
 class _DepoimentoTile extends StatelessWidget {
   final String nome;
   final String texto;
-
   const _DepoimentoTile({required this.nome, required this.texto});
 
   @override

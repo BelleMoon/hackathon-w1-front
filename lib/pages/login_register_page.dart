@@ -5,6 +5,7 @@ import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import '../widgets/footer.dart';
 import '../services/api_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 class LoginRegisterPage extends StatefulWidget {
   const LoginRegisterPage({super.key});
@@ -28,57 +29,109 @@ class _LoginRegisterPageState extends State<LoginRegisterPage> {
   final _senhaController = TextEditingController();
   final _confirmarSenhaController = TextEditingController();
 
+  Future<void> _checkToken() async {
+    try {
+      final userData = await ApiService.getUserData();
+      print(userData);
+      if (userData != null) {
+        Navigator.pushReplacementNamed(context, '/');
+      }
+    } catch (e) {
+      // Token inválido ou expirado, permanecer na tela de login
+    }
+  }
+
   void _toggleMode() {
     setState(() {
       isLogin = !isLogin;
     });
   }
 
+  @override
+  void initState() {
+    super.initState();
+    _checkToken();
+  }
+
   Future<void> _submit() async {
-    if (_formKey.currentState!.validate()) {
-      setState(() => isLoading = true);
+    if (_emailController.text.trim().isEmpty ||
+        !_emailController.text.contains('@')) {
+      _showError('Informe um e-mail válido.');
+      return;
+    }
 
-      try {
-        if (isLogin) {
-          final token = await ApiService.login(
-            _emailController.text,
-            _senhaController.text,
-          );
+    if (_senhaController.text.length < 6) {
+      _showError('A senha deve ter pelo menos 6 caracteres.');
+      return;
+    }
 
-          if (token != null) {
-            // Salve o token no SharedPreferences
-            final prefs = await SharedPreferences.getInstance();
-            await prefs.setString('jwt_token', token);
-
-            Navigator.pushReplacementNamed(context, '/patrimonio');
-          } else {
-            _showError('Falha no login. Verifique suas credenciais.');
-          }
-        } else {
-          final success = await ApiService.register(
-            nome: _nomeController.text,
-            usuario: _usuarioController.text,
-            email: _emailController.text,
-            senha: _senhaController.text,
-          );
-
-          if (success) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Conta criada! Faça login.')),
-            );
-            setState(() {
-              isLogin = true;
-            });
-          } else {
-            _showError('Erro ao criar conta.');
-          }
-        }
-      } catch (e) {
-        _showError('Erro inesperado: $e');
+    if (!isLogin) {
+      if (_nomeController.text.trim().isEmpty) {
+        _showError('Informe seu nome completo.');
+        return;
       }
 
-      setState(() => isLoading = false);
+      if (_usuarioController.text.trim().isEmpty) {
+        _showError('Informe um nome de usuário.');
+        return;
+      }
+
+      if (_confirmarSenhaController.text != _senhaController.text) {
+        _showError('As senhas não coincidem.');
+        return;
+      }
     }
+
+    setState(() => isLoading = true);
+
+    try {
+      if (isLogin) {
+        print('Tentando login com: ${_emailController.text}');
+
+        final token = await ApiService.login(
+          _emailController.text,
+          _senhaController.text,
+        );
+
+        if (token != null && token.isNotEmpty) {
+          final prefs = await SharedPreferences.getInstance();
+          await prefs.setString('jwt_token', token);
+
+          final userData = await ApiService.getUserData();
+          if (userData != null) {
+            Navigator.pushReplacementNamed(context, '/');
+          } else {
+            _showError('Login falhou. Token inválido.');
+            await prefs.remove('jwt_token');
+          }
+        } else {
+          _showError('Email ou senha incorretos.');
+        }
+      } else {
+        final success = await ApiService.register(
+          nome: _nomeController.text,
+          usuario: _usuarioController.text,
+          email: _emailController.text,
+          senha: _senhaController.text,
+        );
+
+        if (success) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Conta criada! Faça login.')),
+          );
+          setState(() {
+            isLogin = true;
+          });
+        } else {
+          _showError('Erro ao criar conta.');
+        }
+      }
+    } catch (e) {
+      _showError('Erro inesperado: $e');
+      debugPrint('Erro login: $e');
+    }
+
+    setState(() => isLoading = false);
   }
 
   void _showError(String message) {
@@ -219,6 +272,10 @@ class _LoginRegisterPageState extends State<LoginRegisterPage> {
                   TextFormField(
                     controller: _senhaController,
                     obscureText: !_senhaVisivel,
+                    textInputAction:
+                        TextInputAction.done, // muda o botão no teclado
+                    onFieldSubmitted: (_) =>
+                        _submit(), // executa quando Enter for pressionado
                     decoration:
                         _inputDecoration('Senha', icon: Icons.lock).copyWith(
                       suffixIcon: IconButton(
@@ -238,6 +295,7 @@ class _LoginRegisterPageState extends State<LoginRegisterPage> {
                     TextFormField(
                       controller: _confirmarSenhaController,
                       obscureText: !_confirmarSenhaVisivel,
+                      onFieldSubmitted: (_) => _submit(),
                       decoration: _inputDecoration('Confirmar senha',
                               icon: Icons.lock_outline)
                           .copyWith(

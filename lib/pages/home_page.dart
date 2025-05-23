@@ -4,6 +4,7 @@ import '../widgets/topbar.dart';
 import 'dart:convert'; // necessário para base64
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:typed_data';
+import '../services/api_service.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -23,17 +24,37 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _loadProfileData() async {
-    final prefs = await SharedPreferences.getInstance();
+    final userData = await ApiService.getUserData();
 
-    final nomeSalvo = prefs.getString('perfil_nome');
-    final imageBase64 = prefs.getString('perfil_image_base64');
-
-    setState(() {
-      _nome = nomeSalvo;
-      if (imageBase64 != null) {
-        _imageBytes = base64Decode(imageBase64);
+    if (userData == null) {
+      // Sessão não está logada, redireciona para login
+      if (mounted) {
+        Navigator.pushReplacementNamed(context, '/login');
       }
-    });
+      return;
+    }
+
+    // Verifica se CPF está nulo ou vazio
+    if (userData['cpf'] == null || userData['cpf'].toString().trim().isEmpty) {
+      if (mounted) {
+        Navigator.pushReplacementNamed(context, '/cadastro-patrimonio');
+      }
+    }
+
+    // Caso contrário, está tudo certo — carrega nome e imagem
+    if (mounted) {
+      setState(() {
+        _nome = userData['name'];
+      });
+
+      final prefs = await SharedPreferences.getInstance();
+      final imageBase64 = prefs.getString('perfil_image_base64');
+      if (imageBase64 != null) {
+        setState(() {
+          _imageBytes = base64Decode(imageBase64);
+        });
+      }
+    }
   }
 
   String _capitalizeFirst(String text) {
@@ -106,10 +127,28 @@ class _HomePageState extends State<HomePage> {
                       ),
                       onPressed: () async {
                         Navigator.pushNamed(context, '/perfil').then((_) {
-                          _loadProfileData(); // só chama quando voltar da tela de perfil
+                          _loadProfileData();
                         });
                       },
                       child: const Text('✏️ Editar Perfil'),
+                    ),
+                    const SizedBox(height: 12),
+                    ElevatedButton.icon(
+                      icon: const Icon(Icons.logout),
+                      label: const Text('Sair da conta'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red.shade600,
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                      ),
+                      onPressed: () async {
+                        final prefs = await SharedPreferences.getInstance();
+                        await prefs.remove('jwt_token'); // limpa o token
+                        Navigator.pushNamedAndRemoveUntil(
+                            context, '/login', (route) => false);
+                      },
                     ),
                   ],
                 ),
@@ -143,7 +182,7 @@ class _HomePageState extends State<HomePage> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        minimumSize: const Size(500, 120),
+                        minimumSize: const Size(500, 110),
                       ),
                       onPressed: () => Navigator.pushNamed(context, '/status'),
                       child: const Text(
@@ -165,7 +204,7 @@ class _HomePageState extends State<HomePage> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        minimumSize: const Size(500, 120),
+                        minimumSize: const Size(500, 110),
                       ),
                       onPressed: () =>
                           Navigator.pushNamed(context, '/patrimonio'),
@@ -188,7 +227,7 @@ class _HomePageState extends State<HomePage> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        minimumSize: const Size(500, 120),
+                        minimumSize: const Size(500, 110),
                       ),
                       onPressed: () =>
                           Navigator.pushNamed(context, '/impostos'),

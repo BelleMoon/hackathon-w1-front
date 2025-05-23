@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:intl/intl.dart';
+import 'package:w1app/widgets/topbar_clean.dart';
+import '../services/api_service.dart';
 
 class ContaCompletaPage extends StatefulWidget {
   const ContaCompletaPage({super.key});
@@ -11,29 +14,58 @@ class ContaCompletaPage extends StatefulWidget {
 
 class _ContaCompletaPageState extends State<ContaCompletaPage> {
   final _formKey = GlobalKey<FormState>();
-
   final _cpfController = TextEditingController();
-  final _patrimonios = <String, double>{
-    'Ações': 0,
-    'Fundos Imobiliários': 0,
-    'Fundos de Investimento': 0,
-    'Títulos de Renda Fixa': 0,
-    'Empresas fora da Bolsa': 0,
-    'Bens Imobiliários': 0,
-    'Outros Bens': 0,
-  };
 
   final cpfFormatter = MaskTextInputFormatter(
     mask: '###.###.###-##',
     filter: {"#": RegExp(r'[0-9]')},
   );
 
+  final currencyFormatter =
+      NumberFormat.currency(locale: 'pt_BR', symbol: 'R\$');
+
+  late final Map<String, TextEditingController> _controllers;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controllers = {
+      'Ações e CNPJs': TextEditingController(text: currencyFormatter.format(0)),
+      'Fundos Imobiliários':
+          TextEditingController(text: currencyFormatter.format(0)),
+      'Fundos de Investimento':
+          TextEditingController(text: currencyFormatter.format(0)),
+      'Títulos de Renda Fixa':
+          TextEditingController(text: currencyFormatter.format(0)),
+      'Empresas fora da Bolsa':
+          TextEditingController(text: currencyFormatter.format(0)),
+      'Bens Imobiliários':
+          TextEditingController(text: currencyFormatter.format(0)),
+      'Outros Bens': TextEditingController(text: currencyFormatter.format(0)),
+    };
+  }
+
   bool _enviado = false;
 
-  void _submit() {
+  void _submit() async {
     if (_formKey.currentState!.validate()) {
       setState(() => _enviado = true);
-      Future.delayed(const Duration(seconds: 2), () {
+
+      final patrimonios = <String, double>{};
+      _controllers.forEach((key, controller) {
+        final value = controller.text
+            .replaceAll(RegExp(r'[^\d,]'), '')
+            .replaceAll(',', '.');
+        patrimonios[key] = double.tryParse(value) ?? 0.0;
+      });
+
+      final cpf = _cpfController.text;
+
+      final cpfOk = await ApiService.updateCPF(cpf);
+      final patrimonyOk = await ApiService.updatePatrimony(patrimonios);
+
+      if (cpfOk && patrimonyOk) {
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
@@ -52,28 +84,52 @@ class _ContaCompletaPageState extends State<ContaCompletaPage> {
             ],
           ),
         );
-      });
+      } else {
+        _showError('Erro ao enviar dados. Tente novamente.');
+      }
+
+      setState(() => _enviado = false);
     }
   }
 
-  Widget _buildSlider(String label, String key) {
+  void _showError(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message)),
+    );
+  }
+
+  Widget _buildValorField(String label, TextEditingController controller) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          '$label: R\$ ${_patrimonios[key]!.toStringAsFixed(0)}',
-          style: const TextStyle(fontWeight: FontWeight.w500),
-        ),
-        Slider(
-          value: _patrimonios[key]!,
-          min: 0,
-          max: 1000000,
-          divisions: 100,
-          label: _patrimonios[key]!.toStringAsFixed(0),
-          onChanged: (value) {
-            setState(() {
-              _patrimonios[key] = value;
-            });
+        Text(label,
+            style: const TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: 14,
+            )),
+        const SizedBox(height: 6),
+        TextFormField(
+          controller: controller,
+          keyboardType: TextInputType.number,
+          inputFormatters: [
+            FilteringTextInputFormatter.digitsOnly,
+            CurrencyTextInputFormatter(),
+          ],
+          decoration: InputDecoration(
+            hintText: 'R\$ 0,00',
+            filled: true,
+            fillColor: Colors.white,
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+            contentPadding: const EdgeInsets.symmetric(
+              vertical: 12,
+              horizontal: 16,
+            ),
+          ),
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Informe o valor';
+            }
+            return null;
           },
         ),
         const SizedBox(height: 16),
@@ -85,11 +141,7 @@ class _ContaCompletaPageState extends State<ContaCompletaPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xfff4f6f8),
-      appBar: AppBar(
-        backgroundColor: const Color(0xff0e1a1f),
-        title: Image.asset('assets/imagens/logo-w1.png', height: 32),
-        centerTitle: false,
-      ),
+      appBar: TopBarLogoOnly(),
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24),
@@ -111,9 +163,10 @@ class _ContaCompletaPageState extends State<ContaCompletaPage> {
                   const Text(
                     'Complete seu cadastro',
                     style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xff0e1a1f)),
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xff0e1a1f),
+                    ),
                   ),
                   const SizedBox(height: 24),
                   TextFormField(
@@ -133,8 +186,8 @@ class _ContaCompletaPageState extends State<ContaCompletaPage> {
                     ),
                   ),
                   const SizedBox(height: 24),
-                  ..._patrimonios.keys
-                      .map((key) => _buildSlider(key, key))
+                  ..._controllers.entries
+                      .map((entry) => _buildValorField(entry.key, entry.value))
                       .toList(),
                   const SizedBox(height: 24),
                   SizedBox(
@@ -145,7 +198,8 @@ class _ContaCompletaPageState extends State<ContaCompletaPage> {
                         backgroundColor: const Color(0xff0e1a1f),
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8)),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
                       ),
                       child: Text(
                         _enviado ? 'Enviando...' : 'Finalizar Cadastro',
@@ -159,6 +213,24 @@ class _ContaCompletaPageState extends State<ContaCompletaPage> {
           ),
         ),
       ),
+    );
+  }
+}
+
+/// Formatter para entrada de moeda brasileira
+class CurrencyTextInputFormatter extends TextInputFormatter {
+  final NumberFormat _formatter =
+      NumberFormat.currency(locale: 'pt_BR', symbol: 'R\$');
+
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    String digits = newValue.text.replaceAll(RegExp(r'[^\d]'), '');
+    double value = double.tryParse(digits) ?? 0.0;
+    String newText = _formatter.format(value / 100);
+    return TextEditingValue(
+      text: newText,
+      selection: TextSelection.collapsed(offset: newText.length),
     );
   }
 }
