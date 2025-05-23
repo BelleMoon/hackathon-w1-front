@@ -11,8 +11,6 @@ import 'pages/impostos_page.dart';
 import 'pages/conta_completa.dart';
 import 'pages/landing_page.dart';
 
-import '../widgets/footer.dart';
-
 void main() {
   runApp(const W1App());
 }

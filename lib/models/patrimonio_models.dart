@@ -5,12 +5,14 @@ class AllocationItem {
   final String name;
   final double percent;
   final Color color;
+
   AllocationItem(this.name, this.percent, this.color);
 }
 
 class LineDataItem {
   final String label;
   final double value;
+
   LineDataItem(this.label, this.value);
 }
 

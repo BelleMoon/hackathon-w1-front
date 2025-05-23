@@ -72,12 +72,16 @@ class _ContaCompletaPageState extends State<ContaCompletaPage> {
             title: const Text('Cadastro completo!'),
             content: const Text(
               'Nossos especialistas logo entrarão em contato para te ajudar a levar seu patrimônio para o próximo nível.',
+              style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white),
             ),
             actions: [
               TextButton(
                 onPressed: () {
                   Navigator.pop(context);
-                  Navigator.pushReplacementNamed(context, '/patrimonio');
+                  Navigator.pushReplacementNamed(context, '/');
                 },
                 child: const Text('Ir para o Dashboard'),
               )

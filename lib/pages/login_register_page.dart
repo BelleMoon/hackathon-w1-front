@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+import 'package:w1app/widgets/topbar_clean2.dart';
 import '../widgets/footer.dart';
 import '../services/api_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:jwt_decoder/jwt_decoder.dart';
 
 class LoginRegisterPage extends StatefulWidget {
   const LoginRegisterPage({super.key});
@@ -200,11 +200,7 @@ class _LoginRegisterPageState extends State<LoginRegisterPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xfff4f6f8),
-      appBar: AppBar(
-        backgroundColor: const Color(0xff0e1a1f),
-        title: Image.asset('assets/imagens/logo-w1.png', height: 32),
-        centerTitle: false,
-      ),
+      appBar: TopBarLogoOnly2(),
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24),

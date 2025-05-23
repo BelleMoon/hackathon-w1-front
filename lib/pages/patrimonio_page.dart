@@ -24,7 +24,7 @@ class PatrimonioPage extends StatelessWidget {
             indicatorColor: Colors.white,
             tabs: [
               Tab(icon: Icon(Icons.pie_chart), text: 'Alocação'),
-              Tab(icon: Icon(Icons.bar_chart), text: 'Performance'),
+              Tab(icon: Icon(Icons.bar_chart), text: 'Patrimônio'),
               Tab(icon: Icon(Icons.show_chart), text: 'Evolução'),
             ],
           ),
@@ -36,7 +36,6 @@ class PatrimonioPage extends StatelessWidget {
             _EvolucaoView(),
           ],
         ),
-        bottomNavigationBar: const Footer(),
       ),
     );
   }
@@ -192,8 +191,7 @@ class _PerformanceView extends StatelessWidget {
           return const Center(child: Text('Nenhum dado disponível.'));
         }
 
-        final maxValue =
-            data.map((e) => e.value).reduce((a, b) => a > b ? a : b);
+        final totalValue = data.map((e) => e.value).fold(0.0, (a, b) => a + b);
 
         return Padding(
           padding: const EdgeInsets.all(24),
@@ -218,15 +216,16 @@ class _PerformanceView extends StatelessWidget {
                         itemBuilder: (context, i) {
                           final item = data[i];
                           return Container(
-                            height: 80,
+                            height: 70,
                             decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(12),
                               boxShadow: const [
                                 BoxShadow(
-                                    color: Colors.black12,
-                                    blurRadius: 4,
-                                    offset: Offset(0, 2))
+                                  color: Colors.black12,
+                                  blurRadius: 4,
+                                  offset: Offset(0, 2),
+                                ),
                               ],
                             ),
                             child: Row(
@@ -259,14 +258,16 @@ class _PerformanceView extends StatelessWidget {
                                       Text(
                                         item.label,
                                         style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 14),
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14,
+                                        ),
                                       ),
                                       const SizedBox(height: 4),
                                       Text(
                                         NumberFormat.currency(
-                                                locale: 'pt_BR', symbol: 'R\$')
-                                            .format(item.value),
+                                          locale: 'pt_BR',
+                                          symbol: 'R\$',
+                                        ).format(item.value),
                                         style: const TextStyle(
                                             color: Colors.black),
                                       ),
@@ -290,7 +291,8 @@ class _PerformanceView extends StatelessWidget {
                           enable: true,
                           builder: (dynamic dataPoint, dynamic point,
                               dynamic series, int pointIndex, int seriesIndex) {
-                            final percent = (dataPoint.value / maxValue) * 100;
+                            final HoldingItem item = dataPoint;
+                            final percent = (item.value / totalValue) * 100;
                             final formatted =
                                 '${percent.toStringAsFixed(2).replaceAll('.', ',')}%';
                             return Container(
@@ -317,8 +319,13 @@ class _PerformanceView extends StatelessWidget {
                           ColumnSeries<HoldingItem, String>(
                             dataSource: data,
                             xValueMapper: (item, _) => item.label,
-                            yValueMapper: (item, _) =>
-                                (item.value / maxValue) * 100,
+                            yValueMapper: (item, _) {
+                              if (totalValue == 0) return 0.0; // segurança
+                              final percent = (item.value / totalValue) * 100;
+                              return item.value == 0
+                                  ? 0.01
+                                  : percent; // altura mínima só para 0
+                            },
                             pointColorMapper: (item, _) => item.color,
                             width: 0.9,
                             spacing: 0.0,

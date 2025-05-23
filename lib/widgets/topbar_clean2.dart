@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 
-class TopBarLogoOnly extends StatelessWidget implements PreferredSizeWidget {
-  const TopBarLogoOnly({super.key});
+class TopBarLogoOnly2 extends StatelessWidget implements PreferredSizeWidget {
+  const TopBarLogoOnly2({super.key});
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      automaticallyImplyLeading: false, // Impede o botão de voltar
       backgroundColor: const Color(0xff0e1a1f),
-      // Botão de voltar padrão incluído automaticamente se necessário
       title: MouseRegion(
         cursor: SystemMouseCursors.click,
         child: GestureDetector(
           onTap: () {
             final currentRoute = ModalRoute.of(context)?.settings.name;
+
             if (currentRoute == '/login' || currentRoute == '/porque') {
               Navigator.pushNamed(context, '/landing');
             }

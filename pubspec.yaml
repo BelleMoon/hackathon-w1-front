@@ -86,6 +86,14 @@ flutter:
     - assets/imagens/icon-investimento.png
     - assets/imagens/google_icon.png
     - assets/imagens/whatsapp-icon.png
+    - assets/imagens/bg-sobre.jpg
+    - assets/icones/real_estate_funds.png
+    - assets/icones/investment_funds.png
+    - assets/icones/companies.png
+    - assets/icones/fixed_income.png
+    - assets/icones/others.png
+    - assets/icones/real_estate.png
+    - assets/icones/stocks.png 
 
   fonts:
     - family: Montserrat

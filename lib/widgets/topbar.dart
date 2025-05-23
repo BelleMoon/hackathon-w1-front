@@ -13,7 +13,10 @@ class TopBar extends StatelessWidget implements PreferredSizeWidget {
         child: GestureDetector(
           onTap: () {
             final currentRoute = ModalRoute.of(context)?.settings.name;
-            if (currentRoute != '/') {
+            if (currentRoute == '/login' || currentRoute == '/porque') {
+              Navigator.pushNamed(context, '/landing');
+            }
+            if (currentRoute != '/' && currentRoute != '/login') {
               Navigator.pushNamed(context, '/');
             }
           },

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:w1app/pages/porque_w1.dart';
 import '../widgets/footer.dart';
-import '../widgets/topbar.dart';
 
 class LandingPage extends StatelessWidget {
   const LandingPage({super.key});

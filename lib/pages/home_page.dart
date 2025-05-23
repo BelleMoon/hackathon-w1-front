@@ -20,7 +20,9 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    _loadProfileData();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadProfileData();
+    });
   }
 
   Future<void> _loadProfileData() async {
@@ -45,15 +47,10 @@ class _HomePageState extends State<HomePage> {
     if (mounted) {
       setState(() {
         _nome = userData['name'];
+        if (userData['profile_image'] != null) {
+          _imageBytes = base64Decode(userData['profile_image']);
+        }
       });
-
-      final prefs = await SharedPreferences.getInstance();
-      final imageBase64 = prefs.getString('perfil_image_base64');
-      if (imageBase64 != null) {
-        setState(() {
-          _imageBytes = base64Decode(imageBase64);
-        });
-      }
     }
   }
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:w1app/widgets/topbar_clean.dart';
 import '../widgets/footer.dart';
 import '../widgets/topbar.dart';
 import 'package:intl/intl.dart';
@@ -29,7 +30,7 @@ class _PorQueFecharPageState extends State<PorQueFecharPage> {
     ];
 
     return Scaffold(
-      appBar: const TopBar(),
+      appBar: const TopBarLogoOnly(),
       backgroundColor: const Color(0xfff5f6fa),
       body: SingleChildScrollView(
         child: Column(
