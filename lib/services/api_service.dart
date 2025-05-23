@@ -8,7 +8,7 @@ import '../models/patrimonio_models.dart';
 
 // API SERVICE
 class ApiService {
-  static const _baseUrl = 'http://localhost:9000';
+  static const _baseUrl = 'https://w1-hackathon.onrender.com';
 
   static Future<List<AllocationItem>> fetchAllocation() async {
     final prefs = await SharedPreferences.getInstance();
@@ -148,6 +148,28 @@ class ApiService {
               (e['value'] ?? 0).toDouble(),
             ))
         .toList();
+  }
+
+  static Future<Map<String, dynamic>?> fetchSingleHoldingStatus() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('jwt_token');
+
+    final response = await http.get(
+      Uri.parse('$_baseUrl/patrimony/get-holding'),
+      headers: {
+        'auth': token ?? '',
+        'Content-Type': 'application/json',
+        'accept': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final json = jsonDecode(response.body);
+      return json['holding'];
+    } else {
+      print('Erro ao buscar status da holding: ${response.statusCode}');
+      return null;
+    }
   }
 
   static Future<List<HoldingStatus>> fetchHoldingsStatus() async {

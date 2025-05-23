@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 import '../widgets/topbar.dart';
 import '../widgets/footer.dart';
-import '../models/holding_status.dart';
 import '../services/api_service.dart';
+import 'package:intl/intl.dart';
 
 class StatusPage extends StatefulWidget {
   const StatusPage({super.key});
@@ -12,34 +13,22 @@ class StatusPage extends StatefulWidget {
 }
 
 class _StatusPageState extends State<StatusPage> {
-  String? _selectedStep;
+  Map<String, dynamic>? _holdingData;
 
-  final List<_StepInfo> _steps = const [
-    _StepInfo(
-      title: 'Contrato Social e Estatuto',
-      description:
-          'Estrutura da holding, regras de gestão e direitos dos sócios.',
-    ),
-    _StepInfo(
-      title: 'Registro na Junta Comercial',
-      description: 'Cadastro da holding na Junta Comercial do estado sede.',
-    ),
-    _StepInfo(
-      title: 'Inscrição no CNPJ',
-      description:
-          'Registro da holding na Receita Federal como pessoa jurídica.',
-    ),
-    _StepInfo(
-      title: 'Integralização de Capital',
-      description:
-          'Formalizar a transferência de bens ou valores para compor o capital social.',
-    ),
-    _StepInfo(
-      title: 'Ações Adicionais',
-      description:
-          'Planejamento sucessório, organização contábil e registro no INSS, conforme as necessidades da holding.',
-    ),
-  ];
+  @override
+  void initState() {
+    super.initState();
+    _fetchHoldingData();
+  }
+
+  Future<void> _fetchHoldingData() async {
+    final data = await ApiService.fetchSingleHoldingStatus();
+    if (mounted) {
+      setState(() {
+        _holdingData = data;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,214 +40,173 @@ class _StatusPageState extends State<StatusPage> {
         title: const TopBar(),
         toolbarHeight: kToolbarHeight * 1.5,
       ),
-      body: FutureBuilder<List<HoldingStatus>>(
-        future: ApiService.fetchHoldingsStatus(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          final holdings = snapshot.data!;
-          return LayoutBuilder(
-            builder: (context, constraints) {
-              final isMobile = constraints.maxWidth < 800;
-              return Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (!isMobile)
-                    Container(
-                      width: 300,
-                      color: const Color(0xffe8ebef),
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text('Status das Holdings',
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black)),
-                          const SizedBox(height: 24),
-                          for (var step in _steps)
-                            GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  _selectedStep = step.title;
-                                });
-                              },
-                              child: Container(
-                                margin: const EdgeInsets.symmetric(vertical: 8),
-                                padding: const EdgeInsets.all(12),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(8),
-                                  boxShadow: const [
-                                    BoxShadow(
-                                        color: Colors.black12,
-                                        blurRadius: 4,
-                                        offset: Offset(0, 2))
-                                  ],
-                                ),
-                                child: Row(
-                                  children: [
-                                    Icon(Icons.arrow_downward,
-                                        size: 16,
-                                        color: _selectedStep == step.title
-                                            ? Colors.blue
-                                            : Colors.black45),
-                                    const SizedBox(width: 8),
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            step.title,
-                                            style: TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.bold,
-                                              color: _selectedStep == step.title
-                                                  ? Colors.blue
-                                                  : Colors.black,
-                                            ),
-                                          ),
-                                          if (_selectedStep == step.title)
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.only(top: 4),
-                                              child: Text(
-                                                step.description,
-                                                style: const TextStyle(
-                                                    fontSize: 12,
-                                                    color: Colors.blue),
-                                              ),
-                                            ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                        ],
-                      ),
+      body: _holdingData == null
+          ? const Center(child: CircularProgressIndicator())
+          : SingleChildScrollView(
+              padding: const EdgeInsets.all(24),
+              child: Center(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Text(
+                      'Economia com a Holding',
+                      style: TextStyle(
+                          fontSize: 26,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black),
                     ),
-                  Expanded(
-                    child: SingleChildScrollView(
-                      padding: const EdgeInsets.all(24),
-                      scrollDirection:
-                          isMobile ? Axis.vertical : Axis.horizontal,
-                      child: Flex(
-                        direction: isMobile ? Axis.vertical : Axis.horizontal,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: holdings
-                            .map((holding) => Padding(
-                                  padding: const EdgeInsets.all(16),
-                                  child: _HoldingColumn(holding: holding),
-                                ))
-                            .toList(),
-                      ),
+                    const SizedBox(height: 32),
+                    LayoutBuilder(
+                      builder: (context, constraints) {
+                        final isMobile = constraints.maxWidth < 700;
+                        return Flex(
+                          direction: isMobile ? Axis.vertical : Axis.horizontal,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            _buildComparisonChart(_holdingData!),
+                            const SizedBox(width: 32, height: 32),
+                            _buildStatusSection(_holdingData!),
+                          ],
+                        );
+                      },
                     ),
-                  ),
-                ],
-              );
-            },
-          );
-        },
-      ),
+                  ],
+                ),
+              ),
+            ),
       bottomNavigationBar: const Footer(),
     );
   }
-}
 
-class _HoldingColumn extends StatelessWidget {
-  final HoldingStatus holding;
+  Widget _buildComparisonChart(Map<String, dynamic> holdingData) {
+    final hasHolding = holdingData['status'] != 'NO_HOLDING';
+    final withTax = double.tryParse(holdingData['tax_with'] ?? '0') ?? 0;
+    final withoutTax = double.tryParse(holdingData['tax_without'] ?? '0') ?? 0;
+    final economia = withoutTax > 0
+        ? ((withoutTax - withTax) / withoutTax * 100).clamp(0, 100)
+        : 0;
+    final chartTitle =
+        hasHolding ? 'Impostos Economizados' : 'O que você está perdendo';
 
-  const _HoldingColumn({required this.holding});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 300,
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 6)],
-      ),
+    return SizedBox(
+      width: 500,
+      height: 600,
       child: Column(
         children: [
-          Text(holding.nome,
-              style:
-                  const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 4),
-          Text(holding.socios, style: const TextStyle(color: Colors.black54)),
-          const SizedBox(height: 16),
-          for (int i = 0; i < holding.etapas.length; i++) ...[
-            _EtapaBox(etapa: holding.etapas[i]),
-            if (i < holding.etapas.length - 1)
-              const Icon(Icons.arrow_downward, size: 16, color: Colors.black54),
-          ],
-          const SizedBox(height: 16),
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: holding.concluido ? Colors.green : Colors.red[100],
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Text(
-              holding.concluido
-                  ? 'PROCESSO CONCLUÍDO'
-                  : 'PROCESSO NÃO CONCLUÍDO',
-              style: TextStyle(
-                color: holding.concluido ? Colors.white : Colors.red[900],
-                fontWeight: FontWeight.bold,
+          Expanded(
+            child: SfCartesianChart(
+              title: ChartTitle(
+                text: chartTitle,
+                textStyle: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w400,
+                ),
               ),
-              textAlign: TextAlign.center,
+              plotAreaBorderWidth: 0,
+              primaryXAxis: CategoryAxis(
+                axisLine: const AxisLine(width: 0),
+                majorGridLines: const MajorGridLines(width: 0),
+              ),
+              primaryYAxis: NumericAxis(
+                minimum: 0,
+                numberFormat:
+                    NumberFormat.currency(locale: 'pt_BR', symbol: 'R\$'),
+                axisLine: const AxisLine(width: 0),
+                majorTickLines: const MajorTickLines(size: 0),
+                majorGridLines: const MajorGridLines(width: 0),
+              ),
+              series: <ChartSeries>[
+                ColumnSeries<_BarData, String>(
+                  dataSource: [
+                    _BarData('Sem Holding', withTax),
+                    _BarData('Com Holding', withoutTax),
+                  ],
+                  xValueMapper: (_BarData data, _) => data.label,
+                  yValueMapper: (_BarData data, _) => data.value,
+                  pointColorMapper: (_BarData data, _) =>
+                      data.label == 'Sem Holding' ? Colors.red : Colors.green,
+                  dataLabelSettings: const DataLabelSettings(
+                    isVisible: true,
+                    textStyle: TextStyle(color: Colors.black),
+                  ),
+                  width: 0.4,
+                  spacing: 0.3,
+                  borderRadius: const BorderRadius.all(Radius.circular(6)),
+                ),
+              ],
             ),
-          )
+          ),
+          const SizedBox(height: 16),
+          Text(
+            '${economia.toStringAsFixed(2).replaceAll('.', ',')}% de economia',
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 22,
+              color: Color.fromARGB(255, 15, 97, 19),
+            ),
+          ),
         ],
       ),
     );
   }
-}
 
-class _EtapaBox extends StatelessWidget {
-  final EtapaStatus etapa;
+  Widget _buildStatusSection(Map<String, dynamic> holdingData) {
+    final hasHolding = holdingData['status'] != 'NO_HOLDING';
 
-  const _EtapaBox({required this.etapa});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 8),
-      padding: const EdgeInsets.all(12),
-      width: double.infinity,
-      decoration: BoxDecoration(
-        border: Border.all(color: etapa.cor),
-        color: etapa.cor.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(etapa.titulo,
-              style: TextStyle(
-                  color: etapa.cor, fontWeight: FontWeight.bold, fontSize: 14)),
-          if (etapa.descricao.isNotEmpty) ...[
-            const SizedBox(height: 4),
-            Text(
-              etapa.descricao,
-              style: const TextStyle(fontSize: 12),
+    if (!hasHolding) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: const [
+          Text(
+            'Você ainda não tem uma holding!',
+            style: TextStyle(fontSize: 30, color: Colors.black),
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(height: 16),
+          Text(
+            'Entre em contato com nossos especialistas para abrir sua holding!',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.grey,
             ),
-          ]
+            textAlign: TextAlign.center,
+          ),
         ],
-      ),
+      );
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        const Text(
+          'Status da Holding',
+          style: TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(height: 16),
+        Text(
+          'Sua holding já está em funcionamento\ne aproveitando benefícios fiscais.',
+          style: TextStyle(
+            fontSize: 18,
+            color: Colors.green[700], // ← verde mais escuro
+          ),
+          textAlign: TextAlign.center,
+        ),
+      ],
     );
   }
 }
 
-class _StepInfo {
-  final String title;
-  final String description;
-  const _StepInfo({required this.title, required this.description});
+class _BarData {
+  final String label;
+  final double value;
+
+  _BarData(this.label, this.value);
 }

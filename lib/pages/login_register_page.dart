@@ -332,37 +332,6 @@ class _LoginRegisterPageState extends State<LoginRegisterPage> {
                       style: const TextStyle(color: Color(0xff0e1a1f)),
                     ),
                   ),
-                  const Divider(height: 32),
-                  const Text("ou", style: TextStyle(color: Colors.black54)),
-                  const SizedBox(height: 16),
-                  ElevatedButton.icon(
-                    icon: Image.asset('assets/imagens/google_icon.png',
-                        height: 20),
-                    label: const Text("Entrar com Google"),
-                    onPressed: _signInWithGoogle,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      foregroundColor: Colors.black87,
-                      minimumSize: const Size.fromHeight(50),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8)),
-                      side: const BorderSide(color: Colors.black12),
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  if (Theme.of(context).platform == TargetPlatform.iOS)
-                    ElevatedButton.icon(
-                      icon: const Icon(Icons.apple),
-                      label: const Text("Entrar com Apple"),
-                      onPressed: _signInWithApple,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.black,
-                        foregroundColor: Colors.white,
-                        minimumSize: const Size.fromHeight(50),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8)),
-                      ),
-                    ),
                 ],
               ),
             ),

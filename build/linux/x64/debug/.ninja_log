@@ -1,60 +1,60 @@
 # ninja log v6
-3713	3742	1747988714756664445	CMakeFiles/install.util	39e292591ebe9f05
-3299	3583	1747988714344412243	CMakeFiles/front.dir/flutter/generated_plugin_registrant.cc.o	5db7c76fc8136f3d
-3	3299	1747988711046581665	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_method_call.h	7468649fc2a941ab
-3	3299	1747988711046581665	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_dart_project.h	7468649fc2a941ab
-3	3299	1747988711046581665	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_binary_messenger.h	7468649fc2a941ab
+1807	1836	1747991141034732706	CMakeFiles/install.util	39e292591ebe9f05
+1419	1707	1747991140648463853	CMakeFiles/front.dir/flutter/generated_plugin_registrant.cc.o	5db7c76fc8136f3d
+3	1419	1747991139230699570	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_method_call.h	7468649fc2a941ab
+3	1419	1747991139230699570	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_dart_project.h	7468649fc2a941ab
+3	1419	1747991139230699570	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_binary_messenger.h	7468649fc2a941ab
 3349	3693	1747927675483177209	plugins/url_launcher_linux/CMakeFiles/url_launcher_linux_plugin.dir/messages.g.cc.o	72bed411b983fc47
-3	3299	1747988711046581665	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_method_codec.h	7468649fc2a941ab
-3	3299	1747988711046581665	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_binary_codec.h	7468649fc2a941ab
-3	3299	1747988711046581665	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/flutter_linux.h	7468649fc2a941ab
-3	3299	1747988711046581665	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/libflutter_linux_gtk.so	7468649fc2a941ab
-3	3299	1747988711046581665	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_method_channel.h	7468649fc2a941ab
-3	3299	1747988711046581665	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/build/linux/x64/debug/flutter/_phony_	7468649fc2a941ab
-3	3299	1747988711046581665	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_string_codec.h	7468649fc2a941ab
-3299	3627	1747988714344222293	CMakeFiles/front.dir/my_application.cc.o	9c87af7533d5e769
-3	3299	1747988711046581665	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_basic_message_channel.h	7468649fc2a941ab
-3	3299	1747988711046581665	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_plugin_registry.h	7468649fc2a941ab
-3627	3713	1747988714670662529	intermediates_do_not_run/front	215e7d6ef1086245
-3	3299	1747988711046581665	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_json_method_codec.h	7468649fc2a941ab
-3	3299	1747988711046581665	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_engine.h	7468649fc2a941ab
-3	3299	1747988711046581665	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_standard_message_codec.h	7468649fc2a941ab
-3	3299	1747988711046581665	flutter/_phony_	7468649fc2a941ab
-3	3299	1747988711046581665	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_plugin_registrar.h	7468649fc2a941ab
-3	3299	1747988711046581665	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_json_message_codec.h	7468649fc2a941ab
-3299	3363	1747988714344527602	plugins/url_launcher_linux/liburl_launcher_linux_plugin.so	bfa3360d3c3327c0
+3	1419	1747991139230699570	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_method_codec.h	7468649fc2a941ab
+3	1419	1747991139230699570	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_binary_codec.h	7468649fc2a941ab
+3	1419	1747991139230699570	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/flutter_linux.h	7468649fc2a941ab
+3	1419	1747991139230699570	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/libflutter_linux_gtk.so	7468649fc2a941ab
+3	1419	1747991139230699570	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_method_channel.h	7468649fc2a941ab
+3	1419	1747991139230699570	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/build/linux/x64/debug/flutter/_phony_	7468649fc2a941ab
+3	1419	1747991139230699570	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_string_codec.h	7468649fc2a941ab
+1419	1728	1747991140648247964	CMakeFiles/front.dir/my_application.cc.o	9c87af7533d5e769
+3	1419	1747991139230699570	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_basic_message_channel.h	7468649fc2a941ab
+3	1419	1747991139230699570	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_plugin_registry.h	7468649fc2a941ab
+1728	1807	1747991140955731255	intermediates_do_not_run/front	215e7d6ef1086245
+3	1419	1747991139230699570	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_json_method_codec.h	7468649fc2a941ab
+3	1419	1747991139230699570	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_engine.h	7468649fc2a941ab
+3	1419	1747991139230699570	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_standard_message_codec.h	7468649fc2a941ab
+3	1419	1747991139230699570	flutter/_phony_	7468649fc2a941ab
+3	1419	1747991139230699570	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_plugin_registrar.h	7468649fc2a941ab
+3	1419	1747991139230699570	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_json_message_codec.h	7468649fc2a941ab
+1420	1480	1747991140648620089	plugins/url_launcher_linux/liburl_launcher_linux_plugin.so	bfa3360d3c3327c0
 3349	3672	1747927675484412949	plugins/url_launcher_linux/CMakeFiles/url_launcher_linux_plugin.dir/url_launcher_plugin.cc.o	f9049721de399c6b
 3349	3657	1747927675484559116	CMakeFiles/front.dir/main.cc.o	99f24b0b5288d7ed
-3	3299	1747988711046581665	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_view.h	7468649fc2a941ab
-3	3299	1747988711046581665	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_message_codec.h	7468649fc2a941ab
-3	3299	1747988711046581665	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_standard_method_codec.h	7468649fc2a941ab
-3	3299	1747988711046581665	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_method_response.h	7468649fc2a941ab
-3	3299	1747988711046581665	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_value.h	7468649fc2a941ab
-2	1495	1747988771016917920	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/libflutter_linux_gtk.so	7468649fc2a941ab
-2	1495	1747988771016917920	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_basic_message_channel.h	7468649fc2a941ab
-2	1495	1747988771016917920	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_binary_codec.h	7468649fc2a941ab
-2	1495	1747988771016917920	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_binary_messenger.h	7468649fc2a941ab
-2	1495	1747988771016917920	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_dart_project.h	7468649fc2a941ab
-2	1495	1747988771016917920	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_engine.h	7468649fc2a941ab
-2	1495	1747988771016917920	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_json_message_codec.h	7468649fc2a941ab
-2	1495	1747988771016917920	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_json_method_codec.h	7468649fc2a941ab
-2	1495	1747988771016917920	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_message_codec.h	7468649fc2a941ab
-2	1495	1747988771016917920	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_method_call.h	7468649fc2a941ab
-2	1495	1747988771016917920	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_method_channel.h	7468649fc2a941ab
-2	1495	1747988771016917920	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_method_codec.h	7468649fc2a941ab
-2	1495	1747988771016917920	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_method_response.h	7468649fc2a941ab
-2	1495	1747988771016917920	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_plugin_registrar.h	7468649fc2a941ab
-2	1495	1747988771016917920	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_plugin_registry.h	7468649fc2a941ab
-2	1495	1747988771016917920	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_standard_message_codec.h	7468649fc2a941ab
-2	1495	1747988771016917920	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_standard_method_codec.h	7468649fc2a941ab
-2	1495	1747988771016917920	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_string_codec.h	7468649fc2a941ab
-2	1495	1747988771016917920	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_value.h	7468649fc2a941ab
-2	1495	1747988771016917920	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_view.h	7468649fc2a941ab
-2	1495	1747988771016917920	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/flutter_linux.h	7468649fc2a941ab
-2	1495	1747988771016917920	flutter/_phony_	7468649fc2a941ab
-2	1495	1747988771016917920	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/build/linux/x64/debug/flutter/_phony_	7468649fc2a941ab
-1496	1556	1747988772511619231	plugins/url_launcher_linux/liburl_launcher_linux_plugin.so	bfa3360d3c3327c0
-1495	1785	1747988772511488513	CMakeFiles/front.dir/flutter/generated_plugin_registrant.cc.o	5db7c76fc8136f3d
-1495	1801	1747988772511259448	CMakeFiles/front.dir/my_application.cc.o	9c87af7533d5e769
-1801	1877	1747988772815958002	intermediates_do_not_run/front	215e7d6ef1086245
-1877	1906	1747988772891959695	CMakeFiles/install.util	39e292591ebe9f05
+3	1419	1747991139230699570	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_view.h	7468649fc2a941ab
+3	1419	1747991139230699570	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_message_codec.h	7468649fc2a941ab
+3	1419	1747991139230699570	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_standard_method_codec.h	7468649fc2a941ab
+3	1419	1747991139230699570	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_method_response.h	7468649fc2a941ab
+3	1419	1747991139230699570	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_value.h	7468649fc2a941ab
+3	1471	1747991286257400071	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/libflutter_linux_gtk.so	7468649fc2a941ab
+3	1471	1747991286257400071	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_basic_message_channel.h	7468649fc2a941ab
+3	1471	1747991286257400071	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_binary_codec.h	7468649fc2a941ab
+3	1471	1747991286257400071	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_binary_messenger.h	7468649fc2a941ab
+3	1471	1747991286257400071	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_dart_project.h	7468649fc2a941ab
+3	1471	1747991286257400071	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_engine.h	7468649fc2a941ab
+3	1471	1747991286257400071	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_json_message_codec.h	7468649fc2a941ab
+3	1471	1747991286257400071	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_json_method_codec.h	7468649fc2a941ab
+3	1471	1747991286257400071	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_message_codec.h	7468649fc2a941ab
+3	1471	1747991286257400071	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_method_call.h	7468649fc2a941ab
+3	1471	1747991286257400071	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_method_channel.h	7468649fc2a941ab
+3	1471	1747991286257400071	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_method_codec.h	7468649fc2a941ab
+3	1471	1747991286257400071	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_method_response.h	7468649fc2a941ab
+3	1471	1747991286257400071	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_plugin_registrar.h	7468649fc2a941ab
+3	1471	1747991286257400071	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_plugin_registry.h	7468649fc2a941ab
+3	1471	1747991286257400071	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_standard_message_codec.h	7468649fc2a941ab
+3	1471	1747991286257400071	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_standard_method_codec.h	7468649fc2a941ab
+3	1471	1747991286257400071	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_string_codec.h	7468649fc2a941ab
+3	1471	1747991286257400071	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_value.h	7468649fc2a941ab
+3	1471	1747991286257400071	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/fl_view.h	7468649fc2a941ab
+3	1471	1747991286257400071	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/linux/flutter/ephemeral/flutter_linux/flutter_linux.h	7468649fc2a941ab
+3	1471	1747991286257400071	flutter/_phony_	7468649fc2a941ab
+3	1471	1747991286257400071	/home/elliot/Área de trabalho/Elliot/Projects/BSI/Hackaton W1/front/build/linux/x64/debug/flutter/_phony_	7468649fc2a941ab
+1471	1530	1747991287726243473	plugins/url_launcher_linux/liburl_launcher_linux_plugin.so	bfa3360d3c3327c0
+1471	1763	1747991287726104700	CMakeFiles/front.dir/flutter/generated_plugin_registrant.cc.o	5db7c76fc8136f3d
+1471	1781	1747991287725897548	CMakeFiles/front.dir/my_application.cc.o	9c87af7533d5e769
+1781	1878	1747991288035432729	intermediates_do_not_run/front	215e7d6ef1086245
+1878	1910	1747991288132434511	CMakeFiles/install.util	39e292591ebe9f05
